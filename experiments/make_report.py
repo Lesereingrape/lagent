@@ -1,9 +1,9 @@
 """Render the README results block directly from results/agent.json.
 
 The README numbers are mechanically tied to the committed artifact: run
-``python experiments/run_study.py`` then ``python experiments/make_report.py`` and
-paste the output between the RESULTS markers. A test asserts the README already
-equals this, so nothing is hand-copied. Every ranking/superlative below is computed
+``python experiments/run_study.py`` then ``python experiments/make_report.py --write``
+to splice the rendered block back between the RESULTS markers. A test asserts the
+README already equals this, so nothing is hand-copied. Every ranking/superlative below is computed
 from the data, not hardcoded, so the prose stays honest if a future run reorders
 the scaffolds.
 """
@@ -52,6 +52,13 @@ def build(data: dict) -> str:
                "so a solve is ground truth, never a model's opinion")
     out.append(f"- tool-use ceiling (gold program, every task solvable) = "
                f"**{gold:.3f}**")
+    env = data.get("environment")
+    if env:
+        out.append(f"- measured under: Python {env['python']} on {env['platform']}, "
+                   f"torch {env['torch']}, {env['threads']} CPU threads, {env['device']} "
+                   "- a rerun inside that environment reproduces this file field for "
+                   "field; elsewhere the thread count changes the float reduction order "
+                   "and the numbers move slightly")
     out.append("")
 
     out.append("### Headline: what the harness, not the model, contributes\n")
@@ -119,5 +126,26 @@ def build(data: dict) -> str:
     return "\n".join(out)
 
 
+def _write(path: Path, block: str) -> None:
+    text = path.read_text(encoding="utf-8")
+    start, end = "<!-- RESULTS:START -->", "<!-- RESULTS:END -->"
+    head, _, rest = text.partition(start)
+    _, _, tail = rest.partition(end)
+    nl = "\n"
+    path.write_text(f"{head}{start}{nl}{block}{nl}{end}{tail}", encoding="utf-8")
+
+
 if __name__ == "__main__":
-    print(build(json.loads(Path("results/agent.json").read_text(encoding="utf-8"))))
+    import argparse
+
+    ap = argparse.ArgumentParser(prog="make_report")
+    ap.add_argument("--write", action="store_true",
+                    help="splice the block into README.md instead of printing it")
+    ap.add_argument("--results", default="results/agent.json")
+    args = ap.parse_args()
+    rendered = build(json.loads(Path(args.results).read_text(encoding="utf-8")))
+    if args.write:
+        _write(Path("README.md"), rendered)
+        print("README results block rewritten")
+    else:
+        print(rendered)

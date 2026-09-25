@@ -9,7 +9,11 @@ the solvability ceiling.
 
 from __future__ import annotations
 
+import platform
+import sys
 from dataclasses import asdict, dataclass
+
+import torch
 
 from .agent import DIRECT, FULL, NO_CONSTRAIN, NO_SCRATCHPAD, gold_rollout, rollout
 from .train import eval_tasks, train_policy
@@ -38,6 +42,22 @@ def _summarise(res: list[dict]) -> ScaffoldRun:
         invalid_rate=round(sum(r["invalid"] for r in res) / n, 4),
         mean_steps=round(sum(r["steps"] for r in res) / n, 3),
     )
+
+
+def environment() -> dict:
+    """The machine these numbers came off, recorded beside them.
+
+    Beam-style constrained decoding and batched logit argmaxes are float reductions
+    whose order depends on the torch build and the thread count, so a rerun is
+    field-for-field identical *inside* this environment and merely close outside it.
+    """
+    return {
+        "python": sys.version.split()[0],
+        "platform": platform.platform(),
+        "torch": torch.__version__,
+        "threads": torch.get_num_threads(),
+        "device": "cpu",
+    }
 
 
 def run_seed(seed: int) -> dict:
@@ -103,4 +123,5 @@ def build_results(per_seed: list[dict], runtime: float) -> dict:
                        "train_steps": TRAIN_STEPS},
             "summary": aggregate(per_seed),
             "per_seed": per_seed,
+            "environment": environment(),
             "runtime_sec": round(runtime, 1)}

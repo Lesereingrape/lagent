@@ -27,5 +27,5 @@ def test_readme_matches_results():
     assert match, "README is missing the RESULTS markers"
     expected = make_report.build(data).strip()
     assert match.group(1).strip() == expected, (
-        "README RESULTS block is stale; run `python experiments/make_report.py` "
-        "and paste between the markers")
+        "README RESULTS block is stale; run `python experiments/make_report.py "
+        "--write` to splice the rendered block back in")

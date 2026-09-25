@@ -1,6 +1,6 @@
 # lagent — a local-first ReAct tool-use agent, and a measured scaffold ablation
 
-**lagent** is a ~700-line, CPU-only ReAct agent: a tiny behaviour-cloned transformer
+**lagent** is a ~650-line, CPU-only ReAct agent: a tiny behaviour-cloned transformer
 drives a tool-using loop on a *verifiable* multi-hop graph task. The interesting part
 is not that it works - it is that we isolate **how much of the success comes from the
 agent's scaffold (its observation memory and constrained decoding) versus the raw
@@ -42,7 +42,7 @@ including reporting a *null* (constrained decoding) honestly instead of inflatin
 pip install -e .                 # torch is the only runtime dependency
 python -m lagent.cli demo        # one seeded run: print a decoded trace + scaffold table
 python experiments/run_study.py  # full 3-seed ablation -> results/agent.json
-python experiments/make_report.py  # re-render the README block from the JSON
+python experiments/make_report.py --write  # splice the block into README.md
 ```
 
 ## Results
@@ -53,6 +53,7 @@ python experiments/make_report.py  # re-render the README block from the JSON
 - task: find the highest-value node one or two neighbourhood-hops from a start, by composing `neighbors` / `max_value` / `finish` tools
 - the verifier runs the *correct program* independently of the policy, so a solve is ground truth, never a model's opinion
 - tool-use ceiling (gold program, every task solvable) = **1.000**
+- measured under: Python 3.13.7 on Windows-11-10.0.26200-SP0, torch 2.14.0+cpu, 8 CPU threads, cpu - a rerun inside that environment reproduces this file field for field; elsewhere the thread count changes the float reduction order and the numbers move slightly
 
 ### Headline: what the harness, not the model, contributes
 
@@ -86,3 +87,20 @@ ReAct solves top-1 (one hop) at 1.000 and top-2 (two hops, requires chaining two
 Swap `ReActPolicy` for a local LLaMA behind the same `Scaffold` interface and the study
 becomes a diagnostic for *your* agent: the observation-memory ablation tells you whether
 your win is the model or the loop, and the ground-truth verifier keeps it honest.
+
+## Reproducing
+
+Nothing in the `Results` block is typed by hand:
+`tests/test_readme_matches_results.py` asserts the README equals
+`make_report.build(results/agent.json)`, and `tests/test_readme_size_claims.py` checks
+the hand-written size claims in the first paragraph against `src/`. The artifact records
+the environment it was measured under (Python, torch build, CPU thread count), and the
+block quotes it — a rerun reproduces it field for field *inside* that environment,
+because float reduction order over a batch follows the thread count. Check that rather
+than trusting the sentence:
+
+```bash
+python experiments/run_study.py --out /tmp/again.json   # leaves results/ untouched
+```
+
+Then diff the two JSONs; the only field allowed to differ is `runtime_sec`.
