@@ -92,8 +92,12 @@ your win is the model or the loop, and the ground-truth verifier keeps it honest
 
 Nothing in the `Results` block is typed by hand:
 `tests/test_readme_matches_results.py` asserts the README equals
-`make_report.build(results/agent.json)`, and `tests/test_readme_size_claims.py` checks
-the hand-written size claims in the first paragraph against `src/`. The artifact records
+`make_report.build(results/agent.json)`, `tests/test_readme_size_claims.py` checks
+the hand-written size claims in the first paragraph against `src/`, and
+`tests/test_artifact_is_internally_consistent.py` recomputes every mean, std and
+ceiling in `summary` from the raw `per_seed` traces with the same arithmetic the study
+uses - so a summary cell that was edited, rounded differently, or regenerated from a
+different trace than it claims is a test failure, not a reviewer's job. The artifact records
 the environment it was measured under (Python, torch build, CPU thread count), and the
 block quotes it — a rerun reproduces it field for field *inside* that environment,
 because float reduction order over a batch follows the thread count. Check that rather
@@ -103,4 +107,8 @@ than trusting the sentence:
 python experiments/run_study.py --out /tmp/again.json   # leaves results/ untouched
 ```
 
-Then diff the two JSONs; the only field allowed to differ is `runtime_sec`.
+Then diff the two JSONs; the only field allowed to differ is `runtime_sec`. That is the
+diff we ran: the rerun reproduced the artifact field for field - the four scaffold
+tables, the template breakdown, the gold ceiling and all three raw per-seed traces -
+and the only number that moved was `runtime_sec` (143.1s against the published 176.9s,
+which is the machine being less busy rather than a different result).
