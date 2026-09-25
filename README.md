@@ -69,7 +69,7 @@ With its observation scratchpad the identical weights reach **1.000** - matching
 ### Two honest nulls we report rather than spin
 
 - **Constrained decoding is free insurance here, not an accuracy win.** Removing the legal-action masks gives 1.000 - the same as ReAct - with a measured invalid-action rate of 0.000. Under greedy decoding the argmax already lands on legal tools/arguments, so the safety net has nothing to catch on this toy task. We show the real number instead of inventing a gap; the mask earns its keep on a stochastic or larger policy, which we do not claim to have measured.
-- **A single-shot guess scores 0.022.** Ask the same weights to name the answer with no tools and they cannot: the value-max lives in the graph, not the weights. This is the control that proves ReAct's score comes from *using* the environment, not from memorising answers.
+- **A single-shot guess scores 0.022.** Ask the same weights to name the answer with no tools and they cannot: the value-max lives in the graph, not the weights. This is the control that shows ReAct's score comes from *using* the environment, not from memorising answers.
 
 ### Difficulty is genuine, and the agent clears both hops
 

@@ -96,7 +96,7 @@ def build(data: dict) -> str:
     out.append(
         f"- **A single-shot guess scores {direct['solve_mean']:.3f}.** Ask the same "
         "weights to name the answer with no tools and they cannot: the value-max lives "
-        "in the graph, not the weights. This is the control that proves ReAct's score "
+        "in the graph, not the weights. This is the control that shows ReAct's score "
         "comes from *using* the environment, not from memorising answers."
     )
     out.append("")
