@@ -77,7 +77,7 @@ ReAct solves top-1 (one hop) at 1.000 and top-2 (two hops, requires chaining two
 
 ### Honest limitations
 
-- Deliberately toy: a 16-node attributed graph, three tools and a ~107k-parameter policy. Real tool-use agents face open-ended natural-language arguments; the *measurement method* (identical weights, only the scaffold varies, ground-truth verifier) is what transfers, not this task.
+- Deliberately toy: a 16-node attributed graph, three tools and a 106,780-parameter policy. Real tool-use agents face open-ended natural-language arguments; the *measurement method* (identical weights, only the scaffold varies, ground-truth verifier) is what transfers, not this task.
 - Greedy decoding makes constrained and unconstrained ReAct coincide, so this study cannot show a decoding-safety benefit; it isolates the memory ablation cleanly and reports the constraint ablation as the null it is.
 - We behaviour-clone from gold traces, so 'the policy learned the procedure' is measured, not proven to generalise to distributions outside the training graphs.
 <!-- RESULTS:END -->
@@ -93,7 +93,8 @@ your win is the model or the loop, and the ground-truth verifier keeps it honest
 Nothing in the `Results` block is typed by hand:
 `tests/test_readme_matches_results.py` asserts the README equals
 `make_report.build(results/agent.json)`, `tests/test_readme_size_claims.py` checks
-the hand-written size claims in the first paragraph against `src/`, and
+the hand-written size claims in the first paragraph against `src/` *and* the exact
+parameter count in the block against the artifact, and
 `tests/test_artifact_is_internally_consistent.py` recomputes every mean, std and
 ceiling in `summary` from the raw `per_seed` traces with the same arithmetic the study
 uses - so a summary cell that was edited, rounded differently, or regenerated from a
@@ -104,11 +105,15 @@ because float reduction order over a batch follows the thread count. Check that 
 than trusting the sentence:
 
 ```bash
-python experiments/run_study.py --out /tmp/again.json   # leaves results/ untouched
+python experiments/run_study.py --out again-check.json   # leaves results/ untouched
 ```
 
 Then diff the two JSONs; the only field allowed to differ is `runtime_sec`. That is the
-diff we ran: the rerun reproduced the artifact field for field - the four scaffold
+diff we ran - a relative scratch path, because Git-Bash rewrites a `/tmp/...` argument
+before the script sees it while `open()` would resolve the same string against the
+drive root. The rerun reproduced the artifact field for field - the four scaffold
 tables, the template breakdown, the gold ceiling and all three raw per-seed traces -
-and the only number that moved was `runtime_sec` (143.1s against the published 176.9s,
-which is the machine being less busy rather than a different result).
+and the only number that moved was `runtime_sec` (176.9s, then 143.1s, now 129.7s as
+the machine got less busy, which is a load difference rather than a different result).
+The committed file also carries `config.n_params`, so the "deliberately toy" line in
+the block above is read off the policy that was trained instead of remembered.

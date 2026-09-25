@@ -112,7 +112,8 @@ def build(data: dict) -> str:
 
     out.append("### Honest limitations\n")
     out.append("- Deliberately toy: a 16-node attributed graph, three tools and a "
-               "~107k-parameter policy. Real tool-use agents face open-ended natural-"
+               f"{cfg['n_params']:,}-parameter policy. Real tool-use agents face "
+               "open-ended natural-"
                "language arguments; the *measurement method* (identical weights, only "
                "the scaffold varies, ground-truth verifier) is what transfers, not this "
                "task.")

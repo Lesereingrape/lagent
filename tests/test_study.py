@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import pytest
+
 from lagent.agent import SCAFFOLDS
 from lagent.study import N_EVAL, SEEDS, ScaffoldRun, _summarise, aggregate, build_results
 
@@ -13,7 +15,7 @@ def _fake_seed(seed: int) -> dict:
                               "solve_rate": 0.9 - 0.2 * i,
                               "invalid_rate": 0.0,
                               "mean_steps": 3.0 + i}
-    return {"seed": seed, "n_eval": N_EVAL, "scaffolds": scaffolds,
+    return {"seed": seed, "n_eval": N_EVAL, "n_params": 1024, "scaffolds": scaffolds,
             "react_by_template": {"top1": 1.0, "top2": 0.8},
             "gold": {"scaffold": "", "solve_rate": 1.0, "invalid_rate": 0.0,
                      "mean_steps": 4.0}}
@@ -44,5 +46,14 @@ def test_build_results_wraps_config_and_runtime():
     out = build_results(per_seed, runtime=12.3)
     assert out["config"]["seeds"] == list(SEEDS)
     assert out["config"]["n_eval"] == N_EVAL
+    assert out["config"]["n_params"] == 1024
     assert out["runtime_sec"] == 12.3
     assert "summary" in out and len(out["per_seed"]) == len(SEEDS)
+
+
+def test_build_results_refuses_to_average_mismatched_policies():
+    """The README's 'same weights' story needs one size, not a majority vote."""
+    per_seed = [_fake_seed(s) for s in SEEDS]
+    per_seed[-1]["n_params"] += 1
+    with pytest.raises(AssertionError, match="different sizes"):
+        build_results(per_seed, runtime=1.0)

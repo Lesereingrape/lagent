@@ -16,6 +16,7 @@ from dataclasses import asdict, dataclass
 import torch
 
 from .agent import DIRECT, FULL, NO_CONSTRAIN, NO_SCRATCHPAD, gold_rollout, rollout
+from .model import count_parameters
 from .train import eval_tasks, train_policy
 from .vocab import TPL_TOP1, TPL_TOP2
 
@@ -75,7 +76,8 @@ def run_seed(seed: int) -> dict:
         if sub:
             by_tpl[name] = round(sum(x["solved"] for x in sub) / len(sub), 4)
     gold = _summarise([gold_rollout(t) for t in tasks])
-    return {"seed": seed, "n_eval": N_EVAL, "scaffolds": scaffolds,
+    return {"seed": seed, "n_eval": N_EVAL, "n_params": count_parameters(model),
+            "scaffolds": scaffolds,
             "react_by_template": by_tpl, "gold": asdict(gold)}
 
 
@@ -119,8 +121,16 @@ def _std(xs: list[float]) -> float:
 
 
 def build_results(per_seed: list[dict], runtime: float) -> dict:
+    """Assemble the artifact, with the trained policy's size in its config.
+
+    ``n_params`` is read off the models that actually ran rather than rebuilt from
+    defaults, so the README's "deliberately toy" sentence cannot outlive a change to
+    the architecture.
+    """
+    sizes = {seed["n_params"] for seed in per_seed}
+    assert sizes == {per_seed[0]["n_params"]}, f"seeds trained different sizes: {sizes}"
     return {"config": {"seeds": list(SEEDS), "n_eval": N_EVAL,
-                       "train_steps": TRAIN_STEPS},
+                       "train_steps": TRAIN_STEPS, "n_params": per_seed[0]["n_params"]},
             "summary": aggregate(per_seed),
             "per_seed": per_seed,
             "environment": environment(),

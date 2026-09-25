@@ -44,7 +44,10 @@ def test_artifact_shape_is_coherent():
     for s in PER_SEED:
         assert s["n_eval"] == SUMMARY["n_eval"]
         assert list(s["scaffolds"]) == SUMMARY["scaffold_order"]
-        assert set(s) == {"seed", "n_eval", "scaffolds", "react_by_template", "gold"}
+        assert set(s) == {"seed", "n_eval", "n_params", "scaffolds",
+                          "react_by_template", "gold"}
+    assert {s["n_params"] for s in PER_SEED} == {DATA["config"]["n_params"]}, (
+        "the config's policy size is not the size the seeds trained")
 
 
 def test_per_scaffold_aggregates_match_the_traces():

@@ -6,7 +6,8 @@
       2
     ],
     "n_eval": 60,
-    "train_steps": 1500
+    "train_steps": 1500,
+    "n_params": 106780
   },
   "summary": {
     "seeds": [
@@ -78,6 +79,7 @@
     {
       "seed": 0,
       "n_eval": 60,
+      "n_params": 106780,
       "scaffolds": {
         "react": {
           "scaffold": "react",
@@ -118,6 +120,7 @@
     {
       "seed": 1,
       "n_eval": 60,
+      "n_params": 106780,
       "scaffolds": {
         "react": {
           "scaffold": "react",
@@ -158,6 +161,7 @@
     {
       "seed": 2,
       "n_eval": 60,
+      "n_params": 106780,
       "scaffolds": {
         "react": {
           "scaffold": "react",
@@ -203,5 +207,5 @@
     "threads": 8,
     "device": "cpu"
   },
-  "runtime_sec": 176.9
+  "runtime_sec": 129.7
 }

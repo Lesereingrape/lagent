@@ -8,12 +8,14 @@ of drift, so both are measured from the code rather than remembered.
 
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 
 from lagent.model import ReActPolicy, count_parameters
 
 ROOT = Path(__file__).resolve().parents[1]
+DATA = json.loads((ROOT / "results" / "agent.json").read_text(encoding="utf-8"))
 
 
 def _source_lines() -> int:
@@ -43,4 +45,16 @@ def test_readme_parameter_count_matches_the_policy_it_describes():
     for k in claimed:
         assert abs(k * 1000 - actual) / actual <= 0.02, (
             f"README says ~{k}k parameters, ReActPolicy() has {actual:,}")
+
+
+def test_the_generated_block_quotes_the_size_the_run_recorded():
+    """The exact figure in the limitations bullet comes from the artifact, not memory."""
+    recorded = DATA["config"]["n_params"]
+    assert recorded == count_parameters(ReActPolicy()), (
+        f"the artifact recorded {recorded:,} parameters; the code now builds "
+        f"{count_parameters(ReActPolicy()):,}")
+    assert all(seed["n_params"] == recorded for seed in DATA["per_seed"]), (
+        "per-seed policies disagree with the config about the model size")
+    assert f"{recorded:,}-parameter" in _readme(), (
+        f"nothing in the README states the recorded {recorded:,} exactly")
 

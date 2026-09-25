@@ -5,7 +5,7 @@ world - it must learn the reusable *procedure*: pick the neighbourhood of the no
 named in the question, reduce it to its value-max, (for two-hop questions) recurse
 once more, then finish on the node the last observation surfaced.  That last part
 matters: the model only ever has to *copy* a node token that a tool just returned,
-never compute anything itself, which is why a ~110k-parameter transformer can learn
+never compute anything itself, which is why a ~107k-parameter transformer can learn
 it on a CPU.
 """
 
