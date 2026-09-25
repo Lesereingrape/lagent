@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lagent"
+version = "0.1.0"
+description = "A local-first ReAct tool-use agent with a measured scaffold-ablation study: one behaviour-cloned tiny-transformer policy rolled out under four different agent harnesses (full ReAct, no observation scratchpad, no constrained decoding, single-shot) on the same verifiable multi-hop graph tasks."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Lesereingrape" }]
+keywords = ["agents", "react", "tool-use", "llm", "behaviour-cloning", "pytorch"]
+dependencies = ["torch>=2.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.14,<0.15"]
+
+[project.scripts]
+lagent = "lagent.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+src = ["src"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP", "RUF", "B", "C4", "SIM", "FURB"]
+ignore = ["SIM105"]

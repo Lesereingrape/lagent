@@ -1,0 +1,200 @@
+{
+  "config": {
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "n_eval": 60,
+    "train_steps": 1500
+  },
+  "summary": {
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "n_eval": 60,
+    "scaffold_order": [
+      "react",
+      "no_scratchpad",
+      "no_constrain",
+      "direct"
+    ],
+    "per_scaffold": {
+      "react": {
+        "solve_mean": 1.0,
+        "solve_std": 0.0,
+        "invalid_mean": 0.0,
+        "steps_mean": 3.955,
+        "solves": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "no_scratchpad": {
+        "solve_mean": 0.0167,
+        "solve_std": 0.0167,
+        "invalid_mean": 0.0,
+        "steps_mean": 5.433,
+        "solves": [
+          0.0,
+          0.0167,
+          0.0333
+        ]
+      },
+      "no_constrain": {
+        "solve_mean": 1.0,
+        "solve_std": 0.0,
+        "invalid_mean": 0.0,
+        "steps_mean": 3.955,
+        "solves": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "direct": {
+        "solve_mean": 0.0222,
+        "solve_std": 0.0255,
+        "invalid_mean": 0.0,
+        "steps_mean": 1.0,
+        "solves": [
+          0.0,
+          0.05,
+          0.0167
+        ]
+      }
+    },
+    "react_by_template": {
+      "top1_mean": 1.0,
+      "top2_mean": 1.0
+    },
+    "gold_solve": 1.0,
+    "episodes": 3
+  },
+  "per_seed": [
+    {
+      "seed": 0,
+      "n_eval": 60,
+      "scaffolds": {
+        "react": {
+          "scaffold": "react",
+          "solve_rate": 1.0,
+          "invalid_rate": 0.0,
+          "mean_steps": 4.0
+        },
+        "no_scratchpad": {
+          "scaffold": "no_scratchpad",
+          "solve_rate": 0.0,
+          "invalid_rate": 0.0,
+          "mean_steps": 5.5
+        },
+        "no_constrain": {
+          "scaffold": "no_constrain",
+          "solve_rate": 1.0,
+          "invalid_rate": 0.0,
+          "mean_steps": 4.0
+        },
+        "direct": {
+          "scaffold": "direct",
+          "solve_rate": 0.0,
+          "invalid_rate": 0.0,
+          "mean_steps": 1.0
+        }
+      },
+      "react_by_template": {
+        "top1": 1.0,
+        "top2": 1.0
+      },
+      "gold": {
+        "scaffold": "",
+        "solve_rate": 1.0,
+        "invalid_rate": 0.0,
+        "mean_steps": 4.0
+      }
+    },
+    {
+      "seed": 1,
+      "n_eval": 60,
+      "scaffolds": {
+        "react": {
+          "scaffold": "react",
+          "solve_rate": 1.0,
+          "invalid_rate": 0.0,
+          "mean_steps": 3.933
+        },
+        "no_scratchpad": {
+          "scaffold": "no_scratchpad",
+          "solve_rate": 0.0167,
+          "invalid_rate": 0.0,
+          "mean_steps": 5.4
+        },
+        "no_constrain": {
+          "scaffold": "no_constrain",
+          "solve_rate": 1.0,
+          "invalid_rate": 0.0,
+          "mean_steps": 3.933
+        },
+        "direct": {
+          "scaffold": "direct",
+          "solve_rate": 0.05,
+          "invalid_rate": 0.0,
+          "mean_steps": 1.0
+        }
+      },
+      "react_by_template": {
+        "top1": 1.0,
+        "top2": 1.0
+      },
+      "gold": {
+        "scaffold": "",
+        "solve_rate": 1.0,
+        "invalid_rate": 0.0,
+        "mean_steps": 3.933
+      }
+    },
+    {
+      "seed": 2,
+      "n_eval": 60,
+      "scaffolds": {
+        "react": {
+          "scaffold": "react",
+          "solve_rate": 1.0,
+          "invalid_rate": 0.0,
+          "mean_steps": 3.933
+        },
+        "no_scratchpad": {
+          "scaffold": "no_scratchpad",
+          "solve_rate": 0.0333,
+          "invalid_rate": 0.0,
+          "mean_steps": 5.4
+        },
+        "no_constrain": {
+          "scaffold": "no_constrain",
+          "solve_rate": 1.0,
+          "invalid_rate": 0.0,
+          "mean_steps": 3.933
+        },
+        "direct": {
+          "scaffold": "direct",
+          "solve_rate": 0.0167,
+          "invalid_rate": 0.0,
+          "mean_steps": 1.0
+        }
+      },
+      "react_by_template": {
+        "top1": 1.0,
+        "top2": 1.0
+      },
+      "gold": {
+        "scaffold": "",
+        "solve_rate": 1.0,
+        "invalid_rate": 0.0,
+        "mean_steps": 3.933
+      }
+    }
+  ],
+  "runtime_sec": 162.7
+}
