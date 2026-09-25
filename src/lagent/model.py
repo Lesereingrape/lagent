@@ -1,6 +1,6 @@
 """A tiny decoder-only transformer that acts as the ReAct policy.
 
-Same nanoGPT-shaped block the other labs use, at ~110k parameters so it trains and
+Same nanoGPT-shaped block the other labs use, at ~107k parameters so it trains and
 rolls out in CPU seconds.  It is a *next-action* model: given the question plus the
 observation scratchpad so far, it emits the tool token and then the argument token.
 A loss mask lets us train only on those decision positions.

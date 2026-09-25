@@ -17,7 +17,7 @@ framework at a real local LLaMA.
   agent must *compose* three tools - `neighbors(node)`, `max_value(list)`,
   `finish(node)`. A single direct guess can never do it. Gold answers come from running
   the correct program, so the verifier is ground truth, independent of the policy.
-- **The policy:** a ~110k-parameter decoder-only transformer, behaviour-cloned from
+- **The policy:** a ~107k-parameter decoder-only transformer, behaviour-cloned from
   expert ReAct traces. Training puts loss **only** on the two contentful tokens of each
   step - the *tool* and its *argument* - because the harness owns the structure markers.
   Fresh random graphs every step, so it learns the reusable procedure, not one world.
@@ -77,7 +77,7 @@ ReAct solves top-1 (one hop) at 1.000 and top-2 (two hops, requires chaining two
 
 ### Honest limitations
 
-- Deliberately toy: a 16-node attributed graph, three tools and a ~110k-parameter policy. Real tool-use agents face open-ended natural-language arguments; the *measurement method* (identical weights, only the scaffold varies, ground-truth verifier) is what transfers, not this task.
+- Deliberately toy: a 16-node attributed graph, three tools and a ~107k-parameter policy. Real tool-use agents face open-ended natural-language arguments; the *measurement method* (identical weights, only the scaffold varies, ground-truth verifier) is what transfers, not this task.
 - Greedy decoding makes constrained and unconstrained ReAct coincide, so this study cannot show a decoding-safety benefit; it isolates the memory ablation cleanly and reports the constraint ablation as the null it is.
 - We behaviour-clone from gold traces, so 'the policy learned the procedure' is measured, not proven to generalise to distributions outside the training graphs.
 <!-- RESULTS:END -->
